@@ -71,18 +71,32 @@ won
     return gameWon;
   }
 
+  /**
+   * Increases the value of the missed property
+   * Removes a life from the scoreboard
+   * Checks if player has remaining lives and ends game if player is out
+   */
   removeLife() {
+    // Remove the last liveHeart of the list
     hearts[hearts.length - 1 - this.missed].src = 'images/lostHeart.png';
+    // Increase the missed property
     this.missed++;
 
+    // If the player fails 5 times call gameOver method
     if (this.missed === 5) {
       this.gameOver(false);
     }
   }
 
+  /**
+   * Displays game over message
+   * @param {boolean} gameWon - Whether or not the user won the game
+   */
   gameOver(gameWon) {
     screenOverlay.style.display = 'flex';
     const gameOverMessage = document.getElementById('game-over-message');
+
+    // Display the message and replace the class name consequently
     if (gameWon) {
       gameOverMessage.textContent = 'You Won!';
       screenOverlay.classList.replace('start', 'win');
@@ -92,6 +106,10 @@ won
     }
   }
 
+  /**
+   * Handles onscreen keyboard button clicks
+   * @param (HTMLButtonElement) button - The clicked button element
+   */
   handleInteraction(keyButton) {
     //
     keyButton.disabled = true;
@@ -112,11 +130,14 @@ won
   }
 
   resetGame() {
+    // Clear the phrase display
     ul.innerHTML = '';
-
-    keys.forEach((key) => key.classList.remove('chosen', 'wrong'));
-    keys.forEach((key) => (key.disabled = false));
-
+    // Enable all keys and remove the classes
+    keys.forEach((key) => {
+      key.classList.remove('chosen', 'wrong');
+      key.disabled = false;
+    });
+    // Reset the default hearts images
     hearts.forEach((img) => (img.src = 'images/liveHeart.png'));
   }
 }
