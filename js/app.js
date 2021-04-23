@@ -6,12 +6,17 @@ const qwerty = document.getElementById('qwerty');
 const startBtn = document.getElementById('btn__reset');
 let game;
 
+// Starts new game on click
 startBtn.addEventListener('click', () => {
   game = new Game();
   game.resetGame();
   game.startGame();
 });
 
+// Set a listener to the entire div
 qwerty.addEventListener('click', (e) => {
-  game.handleInteraction(e);
+  // Call the method only if a button is clicked
+  if (e.target.tagName === 'BUTTON') {
+    game.handleInteraction(e.target);
+  }
 });

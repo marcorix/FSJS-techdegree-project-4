@@ -10,35 +10,65 @@ class Game {
   constructor() {
     this.missed = 0;
     this.phrases = [
-      'better late than never',
-      'no pain no gain',
-      'she is in the pink',
-      'it is raining cats and dogs',
-      'all i need is love',
+      {
+        phrase: 'better late than never',
+      },
+      {
+        phrase: 'no pain no gain',
+      },
+      {
+        phrase: 'she is in the pink',
+      },
+      {
+        phrase: 'it is raining cats and dogs',
+      },
+      {
+        phrase: 'all i need is love',
+      },
     ];
     this.activePhrase = null;
   }
 
-  getRandomPhrase() {
-    const length = this.phrases.length;
-    const index = Math.floor(Math.random() * length);
-    return { phrase: this.phrases[index] };
+  // this method returns a random number
+  getRandomNumber(max) {
+    let randomNumber = Math.floor(Math.random() * max);
+    return randomNumber;
   }
 
+  /**
+   * Selects random phrase from phrases property
+   * @return {Object} Phrase object chosen to be used
+   */
+  getRandomPhrase() {
+    const randomNumber = this.getRandomNumber(this.phrases.length);
+    const randomPhrase = this.phrases[randomNumber];
+
+    return randomPhrase;
+  }
+
+  /**
+   * Begins game by selecting a random phrase and displaying it to user
+   */
   startGame() {
+    // Hide the overlay
     screenOverlay.style.display = 'none';
+    // Get a random phrase and initialize a new Phrase object as a Game property
     const randomPhrase = this.getRandomPhrase();
-    this.activePhrase = new Phrase(randomPhrase);
+    this.activePhrase = new Phrase(randomPhrase.phrase);
+
+    // Add the phrase to the display
     this.activePhrase.addPhraseToDisplay();
   }
 
+  /**
+* Checks for winning move
+* @return {boolean} True if game has been won, false if game wasn't
+won
+*/
   checkForWin() {
     const hiddenLetters = document.querySelectorAll('.hide');
-    if (hiddenLetters.length === 0) {
-      return true;
-    } else {
-      return false;
-    }
+    const gameWon = hiddenLetters.length === 0 ? true : false;
+    return gameWon;
   }
 
   removeLife() {
@@ -62,24 +92,22 @@ class Game {
     }
   }
 
-  handleInteraction(e) {
-    if (e.target.tagName === 'BUTTON') {
-      const letterKey = e.target;
-      letterKey.disabled = true;
+  handleInteraction(keyButton) {
+    //
+    keyButton.disabled = true;
 
-      // check if the letter selected is in the phrase
-      if (this.activePhrase.checkLetter(letterKey.textContent)) {
-        letterKey.classList.add('wrong');
-        this.activePhrase.showMatchedLetter(letterKey.textContent);
-      } else {
-        letterKey.classList.add('chosen');
-        this.removeLife();
-      }
+    // check if the letter selected is in the phrase
+    if (this.activePhrase.checkLetter(keyButton.textContent)) {
+      keyButton.classList.add('wrong');
+      this.activePhrase.showMatchedLetter(keyButton.textContent);
+    } else {
+      keyButton.classList.add('chosen');
+      this.removeLife();
+    }
 
-      // Check for winners
-      if (this.checkForWin()) {
-        this.gameOver(true);
-      }
+    // Check for winners
+    if (this.checkForWin()) {
+      this.gameOver(true);
     }
   }
 
