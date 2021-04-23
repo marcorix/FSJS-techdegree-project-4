@@ -111,7 +111,7 @@ won
    * @param (HTMLButtonElement) button - The clicked button element
    */
   handleInteraction(keyButton) {
-    //
+    //Disable the pressed key button
     keyButton.disabled = true;
 
     // check if the letter selected is in the phrase

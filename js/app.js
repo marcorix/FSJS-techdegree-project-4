@@ -20,3 +20,15 @@ qwerty.addEventListener('click', (e) => {
     game.handleInteraction(e.target);
   }
 });
+
+// Enable the computer keyboard
+window.addEventListener('keydown', (e) => {
+  // get the letter of the key pressed
+  const keyLetter = e.key;
+  const qwertyKeys = document.querySelectorAll('.key');
+  qwertyKeys.forEach((key) => {
+    if (key.textContent === keyLetter && key.disabled === false) {
+      game.handleInteraction(key);
+    }
+  });
+});
