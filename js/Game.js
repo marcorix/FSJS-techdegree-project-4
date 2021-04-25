@@ -9,24 +9,23 @@ const keys = document.querySelectorAll('.key');
 class Game {
   constructor() {
     this.missed = 0;
-    this.phrases = [
-      {
-        phrase: 'better late than never',
-      },
-      {
-        phrase: 'no pain no gain',
-      },
-      {
-        phrase: 'she is in the pink',
-      },
-      {
-        phrase: 'it is raining cats and dogs',
-      },
-      {
-        phrase: 'all i need is love',
-      },
-    ];
+    this.phrases = this.createPhrases();
     this.activePhrase = null;
+  }
+
+  /**
+   * Creates phrases for use in game
+   * @return {array} An array of phrases that could be used in the game
+   */
+  createPhrases() {
+    const phrases = [
+      new Phrase('better late than never'),
+      new Phrase('no pain no gain'),
+      new Phrase('she is in the pink'),
+      new Phrase('it is raining cats and dogs'),
+      new Phrase('all i need is love'),
+    ];
+    return phrases;
   }
 
   // this method returns a random number
@@ -99,10 +98,10 @@ won
     // Display the message and replace the class name consequently
     if (gameWon) {
       gameOverMessage.textContent = 'You Won!';
-      screenOverlay.classList.replace('start', 'win');
+      screenOverlay.className = 'win';
     } else {
       gameOverMessage.textContent = 'You Lose...';
-      screenOverlay.classList.replace('start', 'lose');
+      screenOverlay.className = 'lose';
     }
   }
 
@@ -116,16 +115,16 @@ won
 
     // check if the letter selected is in the phrase
     if (this.activePhrase.checkLetter(keyButton.textContent)) {
-      keyButton.classList.add('wrong');
-      this.activePhrase.showMatchedLetter(keyButton.textContent);
-    } else {
       keyButton.classList.add('chosen');
-      this.removeLife();
-    }
+      this.activePhrase.showMatchedLetter(keyButton.textContent);
 
-    // Check for winners
-    if (this.checkForWin()) {
-      this.gameOver(true);
+      // Check if checkForWin is true
+      if (this.checkForWin()) {
+        this.gameOver(true);
+      }
+    } else {
+      keyButton.classList.add('wrong');
+      this.removeLife();
     }
   }
 
